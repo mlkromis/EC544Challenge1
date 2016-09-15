@@ -17,20 +17,6 @@ Hardware Hookup:
 // XBee's DIN (RX) is connected to pin 3 (Arduino's Software TX)
 SoftwareSerial XBee(2, 3); // RX, TX
 
-#include <OneWire.h>
-#include <DallasTemperature.h>
-// Temperature sensors
-
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS A5
-#define TEMPERATURE_PRECISION 9 // Lower resolution
-
-// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
-
-// Pass our oneWire reference to Dallas Temperature. 
-DallasTemperature sensors(&oneWire);
-
 void setup()
 {
   // Set up both ports at 9600 baud. This value is most important

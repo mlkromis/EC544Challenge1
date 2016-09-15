@@ -31,6 +31,8 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature. 
 DallasTemperature sensors(&oneWire);
 
+DeviceAddress tempDeviceAddress;
+
 void setup()
 {
   // Set up both ports at 9600 baud. This value is most important
@@ -38,16 +40,22 @@ void setup()
   // setting of your XBee.
   XBee.begin(9600);
   Serial.begin(9600);
+  sensors.begin();
+  sensors.getAddress(tempDeviceAddress, 0);
 }
 
 void loop()
 {
+  float tempC = sensors.getTempC(tempDeviceAddress);
   if (Serial.available())
   { // If data comes in from serial monitor, send it out to XBee
     XBee.write(Serial.read());
   }
   if (XBee.available())
   { // If data comes in from XBee, send it out to serial monitor
+    XBee.print(tempC);
     Serial.write(XBee.read());
   }
+  // Serial.print("Temp is ");
+  // Serial.print(tempC);
 }
