@@ -15,7 +15,7 @@ addr2 = b'\x00\x02'
 Node2 = b'\x00\x00\x00\x00\x00\x00\x00\x02'
 addr3 = b'\x00\x03'
 Node3 = b'\x00\x00\x00\x00\x00\x00\x00\x03'
-addr4 = b'\x00\x04'
+addr4 = b'\x18\x57'
 Node4 = b'\x00\x00\x00\x00\x00\x00\x00\x04'
 
 
@@ -34,31 +34,32 @@ for p in ports:
             print "Ignoring this port, using the first one that was found."
 
 if portfound:
+
     ser = serial.Serial(portname, 9600)
 else:
     sys.exit("No serial port seems to have an XBee connected.")
 # Flash the LED attached to DIO1 of the XBee
-xbee = ZigBee(ser)
-print "XBee test"
-xbee.send("tx", dest_addr=addr1, dest_addr_long=Node1)  # Pin 1 high
-resp = xbee.wait_read_frame()
-print ("recieved from node 1: ", resp)
 
 try:
+    xbee = ZigBee(ser)
+    print "XBee test"
     while(1):
+        xbee.send("tx", dest_addr_long=Node4, dest_addr=addr4, data="helloworld")  # Pin 1 high
+        resp = xbee.wait_read_frame()
+        print ("recieved from node 4: ", resp)
         # xbee.send("tx", dest_addr=addr1, dest_addr_long=Node1)  # Pin 1 high
-        resp = xbee.wait_read_frame()
-        print ("recieved from node 1: ",resp)
+        # resp = xbee.wait_read_frame()
+        # print ("recieved from node 1: ",resp)
         # xbee.send("tx", dest_addr=addr2, dest_addr_long=Node2)  # Pin 1 high
-        resp = xbee.wait_read_frame()
-        print ("recieved from node 1: ", resp)
+        # resp = xbee.wait_read_frame()
+        # print ("recieved from node 1: ", resp)
         # xbee.send("tx", dest_addr=addr3, dest_addr_long=Node3)  # Pin 1 high
-        resp = xbee.wait_read_frame()
-        print ("recieved from node 1: ", resp)
+        # resp = xbee.wait_read_frame()
+        # print ("recieved from node 1: ", resp)
         # xbee.send("tx", dest_addr=addr4, dest_addr_long=Node4)  # Pin 1 high
-        resp = xbee.wait_read_frame()
-        print ("recieved from node 1: ", resp)
-        time.sleep(2)
+        # resp = xbee.wait_read_frame()
+        # print ("recieved from node 1: ", resp)
+        time.sleep(.5)
 
 
 except:
