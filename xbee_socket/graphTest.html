@@ -2,8 +2,10 @@
 <html>
 
 <head>
+</head>
+<body>
     <script type="text/javascript">
-    window.onload = function () {
+    function mygraph() {
 
         var dps = []; // dataPoints
 
@@ -50,10 +52,9 @@
         setInterval(function(){updateChart()}, updateInterval); 
 
     }
+    window.onload = mygraph;
     </script>
     <script type="text/javascript" src="C:/Users/mlkro/Desktop/ClassGitRepos/EC544Maria'sRepo/xbee_socket/canvasjs-1.9.1/canvasjs.min.js"></script>
-</head>
-<body>
     <div id="chartContainer" style="height: 300px; width:100%;">
     </div>
 </body>

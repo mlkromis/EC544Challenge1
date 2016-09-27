@@ -1,7 +1,11 @@
 <!DOCTYPE HTML>
-<html><head>
+<html>
+
+<head>
+</head>
+<body>
     <script type="text/javascript">
-    var loadGraph = function () {
+    function mygraph() {
 
         var dps = []; // dataPoints
 
@@ -46,12 +50,60 @@
 
         // update chart after specified time. 
         setInterval(function(){updateChart()}, updateInterval); 
-    };
-    loadGraph();
+
+    }
     </script>
     <script type="text/javascript" src="C:/Users/mlkro/Desktop/ClassGitRepos/EC544Maria'sRepo/xbee_socket/canvasjs-1.9.1/canvasjs.min.js"></script>
-</head>
-<body>
-    <div id="chartContainer" style="height: 300px; width:100%;"><div class="canvasjs-chart-container" style="position: relative; text-align: left; cursor: auto;"><canvas class="canvasjs-chart-canvas" width="955" height="450" style="width: 637px; height: 300px; position: absolute;"></canvas><canvas class="canvasjs-chart-canvas" width="955" height="450" style="width: 637px; height: 300px; position: absolute; cursor: default;"></canvas><div class="canvasjs-chart-toolbar" style="position: absolute; right: 1px; top: 1px;"></div><div class="canvasjs-chart-tooltip" style="position: absolute; height: auto; box-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 2px 2px; z-index: 1000; display: none; border-radius: 5px; left: 886px; bottom: -122px; transition: left 0.2s ease-out, bottom 0.2s ease-out;"><div style="width: auto; height: auto; min-width: 50px; margin: 0px; padding: 5px; font-family: Calibri, Arial, Georgia, serif; font-weight: normal; font-style: italic; font-size: 14px; color: rgb(0, 0, 0); text-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 1px; text-align: left; border: 2px solid rgb(54, 158, 173); background: rgba(255, 255, 255, 0.901961); text-indent: 0px; white-space: nowrap; border-radius: 5px; -webkit-user-select: none;"><span style="color:#369EAD;">390:</span>&nbsp;&nbsp;179</div></div><a class="canvasjs-chart-credit" style="outline:none;margin:0px;position:absolute;right:2px;top:286px;color:dimgrey;text-decoration:none;font-size:11px;font-family: Calibri, Lucida Grande, Lucida Sans Unicode, Arial, sans-serif" tabindex="-1" target="_blank" href="http://canvasjs.com/">CanvasJS.com</a></div></div>
-
-<span style="position: absolute; left: 0px; top: -20000px; padding: 0px; margin: 0px; border: none; white-space: pre; line-height: normal; font-family: Calibri, Optima, Candara, Verdana, Geneva, sans-serif; font-size: 14px; font-weight: normal; display: none;">Mpgyi</span></body></html>
+        <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    window.onload = mygraph;
+  var socket = io();
+  socket.on('average update', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    document.getElementById('avg').innerHTML = "current avg :" + msg;
+    mygraph();
+  });
+    socket.on('node1 update', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    document.getElementById('node1').innerHTML = "node1 temp:" + msg;
+  });
+    socket.on('node2 update', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    document.getElementById('node2').innerHTML = "node2 temp:" + msg;
+  });
+        socket.on('node3 update', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    document.getElementById('node3').innerHTML = "node3 temp:" + msg;
+  });
+  socket.on('node4 update', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    document.getElementById('node4').innerHTML = "node4 temp:" + msg;
+  });
+  /*
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+      socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+        socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+  */
+</script>
+    <div id="chartContainer" style="height: 300px; width:100%;">
+    </div>
+    <div id = "avg">current avg :</div> 
+    <div id = "node1">node1 temp:</div>
+    <div id = "node2">node2 temp:</div>
+    <div id = "node3">node3 temp:</div>
+    <div id = "node4">node4 temp:</div>
+</body>
+</html>
