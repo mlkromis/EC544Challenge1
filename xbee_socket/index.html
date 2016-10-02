@@ -5,8 +5,8 @@
 </head>
 <body>
     <script type="text/javascript">
-    function mygraph() {
-
+    function mygraph(msg) {
+    	
         var dps = []; // dataPoints
 
         var chart = new CanvasJS.Chart("chartContainer",{
@@ -18,6 +18,8 @@
                 dataPoints: dps 
             }]
         });
+        //document.getElementById('avg').innerHTML = "current avg:" + msg;
+        //document.getElementById('node1').innerHTML = "node1 temp:" + msg;
 
         var xVal = 0;
         var yVal = 100; 
@@ -25,6 +27,7 @@
         var dataLength = 500; // number of dataPoints visible at any point
 
         var updateChart = function (count) {
+
             count = count || 1;
             // count is number of times loop runs to generate random dataPoints.
             
@@ -44,26 +47,30 @@
             chart.render();     
 
         };
+    }
 
         // generates first set of dataPoints
-        updateChart(dataLength); 
+        //updateChart(dataLength); 
 
         // update chart after specified time. 
-        setInterval(function(){updateChart()}, updateInterval); 
-
-    }
+        //setInterval(function(){updateChart()}, updateInterval); 
     </script>
-    <script type="text/javascript" src="C:/Users/mlkro/Desktop/ClassGitRepos/EC544Maria'sRepo/xbee_socket/canvasjs-1.9.1/canvasjs.min.js"></script>
+    <script type="text/javascript" src="/canvasjs-1.9.1/canvasjs.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
+window.onload = mygraph;
   var socket = io();
+  socket.on('open', function(msg){
+    //updateChart(10);
+    //$('#messages').append($('<li>').text(msg));
+    mygraph(msg);
+  });
   socket.on('average update', function(msg){
     //updateChart(10);
     //$('#messages').append($('<li>').text(msg));
-    document.getElementById('avg').innerHTML = "current avg :" + msg;
-    mygraph();
+    //updateChart(500,msg);
   });
     socket.on('node1 update', function(msg){
     //updateChart(10);
@@ -75,7 +82,7 @@
     //$('#messages').append($('<li>').text(msg));
     document.getElementById('node2').innerHTML = "node2 temp:" + msg;
   });
-        socket.on('node3 update', function(msg){
+   socket.on('node3 update', function(msg){
     //updateChart(10);
     //$('#messages').append($('<li>').text(msg));
     document.getElementById('node3').innerHTML = "node3 temp:" + msg;
