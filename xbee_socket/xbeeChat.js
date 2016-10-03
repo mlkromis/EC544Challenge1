@@ -39,8 +39,10 @@ var sp;
 sp = new SerialPort(portName, portConfig);
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname +'/canvasjs-1.9.1/basic_line_chart.html');
+  res.sendFile(__dirname +'/graphTest.html');
 });
+
+io.emit('initialize');
 
 io.on('connection', function(socket){
   io.emit('open');
