@@ -7,48 +7,114 @@
     <script type="text/javascript">
     function mygraph(num) {
         var socket = io();
+        var avgdps = []; // dataPoints    
+        var barinfo = [     
+        	{y: 0, label: "Node 1"},
+        	{y: 0,  label: "Node 2" },
+        	{y: 0,  label: "Node 3"},
+        	{y: 0,  label: "Node 4"},
+        	{y: 0,  label: "Average"}       
+        	];
         socket.on('average update', function(msg){
             //updateChart(10);
             //$('#messages').append($('<li>').text(msg));
             document.getElementById('avg').innerHTML = "current avg :" + msg;
             yVal=msg;
+            avgtmp = msg;
         });
-            //var canvas = require('./src/canvas-js-lib')
-            var dps = []; // dataPoints
+        socket.on('node1 update', function(msg){
+    		//updateChart(10);
+    		//$('#messages').append($('<li>').text(msg));
+    		node1tmp = +msg;
+    		document.getElementById('node1').innerHTML = "node1 temp:" + msg;
+    		
+  		});
+  		socket.on('node2 update', function(msg){
+    		//updateChart(10);
+    		//$('#messages').append($('<li>').text(msg));
+    		node2tmp = +msg;
+    		document.getElementById('node2').innerHTML = "node2 temp:" + msg;
+    		
+  		});
+  		socket.on('node3 update', function(msg){
+    		//updateChart(10);
+    		//$('#messages').append($('<li>').text(msg));
+    		node3tmp =+msg;
+    		document.getElementById('node3').innerHTML = "node3 temp:" + msg;
+  			
+  		});
 
-            var chart = new CanvasJS.Chart("chartContainer",{
+  	  	socket.on('node4 update', function(msg){
+    		//updateChart(10);
+    		//$('#messages').append($('<li>').text(msg));
+    		node4tmp = +msg;
+    		document.getElementById('node4').innerHTML = "node4 temp:" + msg;
+  			
+  		});
+           //var canvas = require('./src/canvas-js-lib')
+
+        var avgChart = new CanvasJS.Chart("avgChartCont",{
                 title :{
-                    text: "Live Random Data"
+                    text: "Live Temperature Average"
                 },          
                 data: [{
                     type: "line",
-                    dataPoints: dps 
+                    dataPoints: avgdps 
                 }]
             });
-            var xVal = 0;
-            var yVal = 0; 
-            var updateInterval = 100;
-            var dataLength = 500; // number of dataPoints visible at any point
-        var updateChart = function () {
+
+	var chart = new CanvasJS.Chart("barChartCont",{
+      	title:{
+        	text: "Current Temperatures"    
+      	},
+      	data: [{        
+        	type: "column",  
+        	dataPoints: barinfo
+      		}]
+   	 	});
+            //chart.render();
+        var xVal = 0;
+        var yVal = 0;
+       	var node1tmp = 0;
+		var node2tmp = 0;
+		var node3tmp = 0;
+		var node4tmp = 0;
+		var avgtmp = 0;
+        var updateInterval = 2000;
+        var dataLength = 100; // number of dataPoints visible at any point
+
+        avgChart.render();  
+        chart.render();  
+        
+	var updateChart = function () {
 
             // count is number of times loop runs to generate random dataPoints.
             
-                dps.push({
+            avgdps.push({
                     x: xVal,
                     y: yVal
                 });
-                xVal++;
-            if (dps.length > dataLength)
+                xVal = xVal+2;
+            if (avgdps.length > dataLength)
             {
-                dps.shift();                
+                avgdps.shift();                
             }
-            
-            chart.render();     
-
+            barinfo.shift();
+            barinfo.push({y: avgtmp,  label: "Average"}); 
+        	barinfo.shift();
+        	barinfo.push({y: node2tmp,  label: "Node 2"});
+        	barinfo.shift();
+        	barinfo.push({y: node3tmp,  label: "Node 3"});
+        	barinfo.shift();
+        	barinfo.push({y: node4tmp,  label: "Node 4"});
+            barinfo.shift();
+        	barinfo.push({y: node1tmp, label: "Node 1"});
+            avgChart.render(); 
+            chart.render();   
         };
 
         // generates first set of dataPoints
-        updateChart(dataLength); 
+        //updateChart(); 
 
         // update chart after specified time. 
         setInterval(function(){updateChart()}, updateInterval); 
@@ -68,27 +134,6 @@
     //$('#messages').append($('<li>').text(msg));
         mygraph(1);
   });
-
-    socket.on('node1 update', function(msg){
-    //updateChart(10);
-    //$('#messages').append($('<li>').text(msg));
-    document.getElementById('node1').innerHTML = "node1 temp:" + msg;
-  });
-    socket.on('node2 update', function(msg){
-    //updateChart(10);
-    //$('#messages').append($('<li>').text(msg));
-    document.getElementById('node2').innerHTML = "node2 temp:" + msg;
-  });
-        socket.on('node3 update', function(msg){
-    //updateChart(10);
-    //$('#messages').append($('<li>').text(msg));
-    document.getElementById('node3').innerHTML = "node3 temp:" + msg;
-  });
-  socket.on('node4 update', function(msg){
-    //updateChart(10);
-    //$('#messages').append($('<li>').text(msg));
-    document.getElementById('node4').innerHTML = "node4 temp:" + msg;
-  });
   /*
   socket.on('chat message', function(msg){
     $('#messages').append($('<li>').text(msg));
@@ -99,9 +144,15 @@
         socket.on('chat message', function(msg){
     $('#messages').append($('<li>').text(msg));
   });
+  
+
+
   */
+
 </script>
-    <div id="chartContainer" style="height: 300px; width:100%;">
+    <div id="avgChartCont" style="height: 300px; width:100%;">
+    </div>
+    <div id="barChartCont" style="height: 300px; width: 100%;">
     </div>
     <div id = "avg">current avg :</div> 
     <div id = "node1">node1 temp:</div>
